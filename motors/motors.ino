@@ -48,53 +48,13 @@ void loop() {
     }
     Serial.println();
     if (IrReceiver.decodedIRData.command == 0x18) {  // forwards
-      analogWrite(M1a, GlobalPWM);
-      digitalWrite(M1b, LOW);
-
-      digitalWrite(M2a, LOW);
-      analogWrite(M2b, GlobalPWM);
-
-      analogWrite(M3a, GlobalPWM);
-      digitalWrite(M3b, LOW);
-
-      digitalWrite(M4a, LOW);
-      analogWrite(M4b, GlobalPWM);
+      drive(0, 0.2, 0);
     } else if (IrReceiver.decodedIRData.command == 0x52) {  // backwards
-      analogWrite(M2a, GlobalPWM);
-      digitalWrite(M2b, LOW);
-
-      digitalWrite(M3a, LOW);
-      analogWrite(M3b, GlobalPWM);
-
-      analogWrite(M4a, GlobalPWM);
-      digitalWrite(M4b, LOW);
-
-      digitalWrite(M1a, LOW);
-      analogWrite(M1b, GlobalPWM);
+      drive(180, 0.2, 0);
     } else if (IrReceiver.decodedIRData.command == 0x5A) {  // right
-      digitalWrite(M1a, LOW);
-      analogWrite(M1b, GlobalPWM);
-
-      analogWrite(M2a, GlobalPWM);
-      digitalWrite(M2b, LOW);
-
-      analogWrite(M3a, GlobalPWM);
-      digitalWrite(M3b, LOW);
-
-      digitalWrite(M4a, LOW);
-      analogWrite(M4b, GlobalPWM);
+      drive(90, 0.2, 0);
     } else if (IrReceiver.decodedIRData.command == 0x8) {  // left
-      digitalWrite(M2a, LOW);
-      analogWrite(M2b, GlobalPWM);
-
-      analogWrite(M3a, GlobalPWM);
-      digitalWrite(M3b, LOW);
-
-      analogWrite(M4a, GlobalPWM);
-      digitalWrite(M4b, LOW);
-
-      digitalWrite(M1a, LOW);
-      analogWrite(M1b, GlobalPWM);
+      drive(270, 0.2, 0);
     } else if (IrReceiver.decodedIRData.command == 0x45) {  // turn left
       digitalWrite(M1a, LOW);
       analogWrite(M1b, GlobalPWM);
@@ -268,10 +228,10 @@ void drive(float direction_deg, float speed, float rotation) {
 
     // X-drive kinematics for 4 wheels: FL, FR, BR, BL
     float wheel_speeds[4];
-    wheel_speeds[0] = vx * sin(45 * 3.14159265 / 180.0) + vy * cos(45 * 3.14159265 / 180.0) + rotation;
-    wheel_speeds[1] = vx * sin(-45 * 3.14159265 / 180.0) + vy * cos(-45 * 3.14159265 / 180.0) + rotation;
-    wheel_speeds[2] = vx * sin(-135 * 3.14159265 / 180.0) + vy * cos(-135 * 3.14159265 / 180.0) + rotation;
-    wheel_speeds[3] = vx * sin(135 * 3.14159265 / 180.0) + vy * cos(135 * 3.14159265 / 180.0) + rotation;
+    wheel_speeds[0] = 255 * vx * sin(45 * 3.14159265 / 180.0) + vy * cos(45 * 3.14159265 / 180.0) + rotation;
+    wheel_speeds[1] = 255 * vx * sin(-45 * 3.14159265 / 180.0) + vy * cos(-45 * 3.14159265 / 180.0) + rotation;
+    wheel_speeds[2] = 255 * vx * sin(-135 * 3.14159265 / 180.0) + vy * cos(-135 * 3.14159265 / 180.0) + rotation;
+    wheel_speeds[3] = 255 * vx * sin(135 * 3.14159265 / 180.0) + vy * cos(135 * 3.14159265 / 180.0) + rotation;
 
     // Normalize speeds if needed
     float max_speed = 0;
