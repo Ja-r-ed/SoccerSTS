@@ -260,48 +260,36 @@ float pidController(float error) {
   return pidOut;
 }
 
-void RobotDrive(float Speed, int Direction, float Rotation) {
-  float pi = 3.1415926;
-  float T = Direction * 3.14159265 / 180.0;  // Convert to radians
-  float R = Rotation;
-  float S = Speed;
+void drive(float direction_deg, float speed, float rotation) {
+    // Convert direction to radians
+    float direction_rad = direction_deg * 3.14159265 / 180.0;
+    float vx = speed * cos(direction_rad);
+    float vy = speed * sin(direction_rad);
 
+    // X-drive kinematics for 4 wheels: FL, FR, BR, BL
+    float wheel_speeds[4];
+    wheel_speeds[0] = vx * sin(45 * 3.14159265 / 180.0) + vy * cos(45 * 3.14159265 / 180.0) + rotation;
+    wheel_speeds[1] = vx * sin(-45 * 3.14159265 / 180.0) + vy * cos(-45 * 3.14159265 / 180.0) + rotation;
+    wheel_speeds[2] = vx * sin(-135 * 3.14159265 / 180.0) + vy * cos(-135 * 3.14159265 / 180.0) + rotation;
+    wheel_speeds[3] = vx * sin(135 * 3.14159265 / 180.0) + vy * cos(135 * 3.14159265 / 180.0) + rotation;
 
-  float P1 = -((cos(T + (pi / 4.0) * (-abs(R) + 1))) / (cos(pi / 4.0)));
-  float P2 = -((cos(T + (3 * pi / 4.0) * (-abs(R) + 1))) / (cos(pi / 4.0)));
+    // Normalize speeds if needed
+    float max_speed = 0;
+    for (int i = 0; i < 4; i++) {
+        if (abs(wheel_speeds[i]) > max_speed) {
+            max_speed = abs(wheel_speeds[i]);
+        }
+    }
+    if (max_speed > 1.0) {
+        for (int i = 0; i < 4; i++) {
+            wheel_speeds[i] /= max_speed;
+        }
+    }
 
-  float Pfl = P2 + R;
-  float Pfr = P1 - R;
-  float Pbl = P1 + R;
-  float Pbr = P2 - R;
-
-  float biggest = 0;
-  if (abs(Pfl) > abs(Pfr)) {
-    biggest = abs(Pfl);
-  }
-  if (abs(Pbl) > biggest) {
-    biggest = abs(Pbl);
-  }
-  if (abs(Pbr) > biggest) {
-    biggest = abs(Pbr);
-  }
-
-  float s = biggest / S;
-
-  float Mfl = Pfl / s;
-  float Mfr = Pfr / s;
-  float Mbl = Pbl / s;
-  float Mbr = Pbr / s;
-
-  Mfl = Mfl * 255;
-  Mfr = Mfr * 255;
-  Mbl = Mbl * 255;
-  Mbr = Mbr * 255;
-
-  SetSpeed(1, Mfl);
-  SetSpeed(2, Mfr);
-  SetSpeed(3, Mbl);
-  SetSpeed(4, Mbr);
+    SetSpeed(1, wheel_speeds[0]);
+    SetSpeed(2, wheel_speeds[1]);
+    SetSpeed(3, wheel_speeds[3]);
+    SetSpeed(4, wheel_speeds[2]);
 }
 
 void SetSpeed(int Motor, int PWM) {

@@ -101,7 +101,7 @@ def main():
     clock = pygame.time.Clock()
 
     robot = XDriveRobot(400, 300)
-    pid = PID(1.0, 0.0, 0.1)
+    pid = PID(0.1, 0.0, 0.01)
 
     translation_dir = 0
     speed = 0
