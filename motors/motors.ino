@@ -16,6 +16,7 @@ int Da = 11;
 int Db = 12;
 int DPWM = 10;  
 
+int GlobalPWM = 40;
 //   Front Left  (M1)
 //   Front Right (M2)
 //   Back Left   (M3)
@@ -47,79 +48,81 @@ void loop() {
     }
     Serial.println();
     if (IrReceiver.decodedIRData.command == 0x18) {  // forwards
-      analogWrite(M1a, 40);
+      analogWrite(M1a, GlobalPWM);
       digitalWrite(M1b, LOW);
 
       digitalWrite(M2a, LOW);
-      analogWrite(M2b, 40);
+      analogWrite(M2b, GlobalPWM);
 
-      analogWrite(M3a, 40);
+      analogWrite(M3a, GlobalPWM);
       digitalWrite(M3b, LOW);
 
       digitalWrite(M4a, LOW);
-      analogWrite(M4b, 40);
+      analogWrite(M4b, GlobalPWM);
     } else if (IrReceiver.decodedIRData.command == 0x52) {  // backwards
-      analogWrite(M2a, 40);
+      analogWrite(M2a, GlobalPWM);
       digitalWrite(M2b, LOW);
 
       digitalWrite(M3a, LOW);
-      analogWrite(M3b, 40);
+      analogWrite(M3b, GlobalPWM);
 
-      analogWrite(M4a, 40);
+      analogWrite(M4a, GlobalPWM);
       digitalWrite(M4b, LOW);
 
       digitalWrite(M1a, LOW);
-      analogWrite(M1b, 40);
-    } else if (IrReceiver.decodedIRData.command == 0x5A) {  // turn right
+      analogWrite(M1b, GlobalPWM);
+    } else if (IrReceiver.decodedIRData.command == 0x5A) {  // right
       digitalWrite(M1a, LOW);
-      analogWrite(M1b, 100);
+      analogWrite(M1b, GlobalPWM);
 
-      digitalWrite(M2a, LOW);
-      analogWrite(M2b, 100);
+      analogWrite(M2a, GlobalPWM);
+      digitalWrite(M2b, LOW);
 
-      digitalWrite(M3a, LOW);
-      analogWrite(M3b, 100);
+      analogWrite(M3a, GlobalPWM);
+      digitalWrite(M3b, LOW);
 
       digitalWrite(M4a, LOW);
-      analogWrite(M4b, 100);
-    } else if (IrReceiver.decodedIRData.command == 0x8) {  // turn left
-      digitalWrite(M1a, LOW);
-      analogWrite(M1b, 100);
-
+      analogWrite(M4b, GlobalPWM);
+    } else if (IrReceiver.decodedIRData.command == 0x8) {  // left
       digitalWrite(M2a, LOW);
-      analogWrite(M2b, 100);
+      analogWrite(M2b, GlobalPWM);
 
-      digitalWrite(M3a, LOW);
-      analogWrite(M3b, 100);
+      analogWrite(M3a, GlobalPWM);
+      digitalWrite(M3b, LOW);
 
-      digitalWrite(M4a, LOW);
-      analogWrite(M4b, 100);
+      analogWrite(M4a, GlobalPWM);
+      digitalWrite(M4b, LOW);
+
+      digitalWrite(M1a, LOW);
+      analogWrite(M1b, GlobalPWM);
     } else if (IrReceiver.decodedIRData.command == 0x45) {  // turn left
       digitalWrite(M1a, LOW);
-      analogWrite(M1b, 100);
+      analogWrite(M1b, GlobalPWM);
 
       digitalWrite(M2a, LOW);
-      analogWrite(M2b, 100);
+      analogWrite(M2b, GlobalPWM);
 
       digitalWrite(M3a, LOW);
-      analogWrite(M3b, 100);
+      analogWrite(M3b, GlobalPWM);
 
       digitalWrite(M4a, LOW);
-      analogWrite(M4b, 100);
+      analogWrite(M4b, GlobalPWM);
     } else if (IrReceiver.decodedIRData.command == 0x46) {  // dribble
-
+      digitalWrite(Da, HIGH);
+      digitalWrite(Db, LOW);
+      analogWrite(DPWM, 40);
     } else if (IrReceiver.decodedIRData.command == 0x47) {  // turn right
-      digitalWrite(M1a, LOW);
-      analogWrite(M1b, 100);
+      digitalWrite(M1b, LOW);
+      analogWrite(M1a, GlobalPWM);
 
-      digitalWrite(M2a, LOW);
-      analogWrite(M2b, 100);
+      digitalWrite(M2b, LOW);
+      analogWrite(M2a, GlobalPWM);
 
-      digitalWrite(M3a, LOW);
-      analogWrite(M3b, 100);
+      digitalWrite(M3b, LOW);
+      analogWrite(M3a, GlobalPWM);
 
-      digitalWrite(M4a, LOW);
-      analogWrite(M4b, 100);
+      digitalWrite(M4b, LOW);
+      analogWrite(M4a, GlobalPWM);
     }
     delay(100);
     digitalWrite(M1a, LOW);
