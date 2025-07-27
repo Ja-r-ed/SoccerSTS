@@ -98,9 +98,13 @@ ESP-IDF Programming Guide - ESP32 - — ESP-IDF Programming Guide v5.2.1 documen
 
 ## 9. Acknowledgements
 Mr. Lynch-Wells, for organising all our meetings for building this wheelchair robot, and for ordering the parts and putting up with us while we tweaked and tweaked and tweaked. 
+
 Mr. Newbold and Ms Silva, for organising the STS side of this and helping us write this report and nudging us in the right direction for this report. 
+
 Mr. McIntosh and Mr. Martinek, for letting us 3D print and test our robot at all hours of the day. 
+
 Aldrich Liem, for giving us constant advice and lending us equipment to help make this happen. 
+
 ## 10. Appendix
 ### Logbook:
 30/3/25 - Started CAD model
