@@ -83,12 +83,19 @@ over the course of five school days, with errors in the 3D printing and the codi
 making this any less difficult.
 ## 8. References
 robocup-junior 2020, GitHub - robocup-junior/awesome-rcj-soccer: A curated list of resources relevant to RoboCupJunior Soccer, GitHub, viewed 27 July 2025, <https://github.com/robocup-junior/awesome-rcj-soccer/> 
+
 Small Size League | RoboCup Soccer – Information for the administration of the RoboCup Soccer Small Size League n.d., RoboCup Small Size League, viewed 27 July 2025, <https://ssl.robocup.org/>
+
 Open-Source Kicker Circuit - Platform for creating and sharing projects - OSHWLab, Oshwlab.com, viewed 27 July 2025, <https://oshwlab.com/afgasgasdg/open-source-kicker-circuit> 
+
 RoboCupJunior, viewed 27 July 2025, <https://junior.robocup.org/> Austermann, N, Davis Imai, K, Alexeevich Korennykh, D & Mark Ogata, S n.d., Lightweight Soccer Robot with Dribbler, Kicker, and Vector Projections: Orion 2021, viewed 27 July 2025, <https://robocup-junior.github.io/soccer-2021/pdfs/TDPs/LWL_Orion.pdf>. 
+
 Imai, K 2022, RoboCupJunior Open, Keiji Imai, viewed 27 July 2025, <https://kogappa.com/projects/rcj_open/> 
+
 Arduino n.d., Arduino Docs | Arduino Documentation, <http://docs.arduino.cc>
+
 ESP-IDF Programming Guide - ESP32 - — ESP-IDF Programming Guide v5.2.1 documentation n.d., <http://docs.espressif.com> 
+
 ## 9. Acknowledgements
 Mr. Lynch-Wells, for organising all our meetings for building this wheelchair robot, and for ordering the parts and putting up with us while we tweaked and tweaked and tweaked. 
 Mr. Newbold and Ms Silva, for organising the STS side of this and helping us write this report and nudging us in the right direction for this report. 
@@ -102,19 +109,23 @@ Aldrich Liem, for giving us constant advice and lending us equipment to help mak
 - Began research on different components, such as motor controllers
 - Started basic codebase
 - Created github project
-- Started on basic drivebase code 
+- Started on basic drivebase code
+
 18/4/25 - Continued working on CAD model
 - Found viable motor options
 - Created motor CADs
-- Found possible sensors, such as the IMU 
+- Found possible sensors, such as the IMU
+
 30/5/25 - Continued working on CAD model
 - Found all parts required
 - Began basic layout drafts
-- Decided on battery 
+- Decided on battery
+
 31/5/25 - Finished the omniwheels
 - Refined motor controller, motor and microcontroller choices to current
 - Colour coded parts
-- Created another draft layout with new components 
+- Created another draft layout with new components
+
 1/6/25 - Started first revision of actual bottom parts
 - Created motor mounts
 - Created top-bottom spacers
@@ -122,19 +133,22 @@ Aldrich Liem, for giving us constant advice and lending us equipment to help mak
 - Finished basic drivebase code
 - Tuned to fit cad parameters
 - Started camera testing with Pixy2
-- Started computer vision code 
+- Started computer vision code
+
 13/6/25 - Created the first draft of the top half
 - Mounted the ESP32s and battery
 - Still need to mount dribbler motor and controller
 - First revision of dribbler drum
-- Ordered parts! 
+- Ordered parts!
+
 20/7/25 - Finished CAD!
 - Mounted dribbler drum
 - Mounted dribbler motor and motor driver
 - Added cable routing holes
 - Pocketed base to remove weight
 - Added pulleys to dribbler motor
-- Needs to be printed to begin assembly 
+- Needs to be printed to begin assembly
+
 22/7/25 - Printed most parts
 - Began bottom half assembly
 - Began top half assembly
@@ -151,8 +165,6 @@ Aldrich Liem, for giving us constant advice and lending us equipment to help mak
 - Because of no ESP32 (and thus no wifi/bluetooth functionality), we used a IR (infrared) remote
 - Used much simpler code without the complex math because it was more reliable 
 ### Finished CAD:
-https://cad.onshape.com/documents/fc0a5e085ca7f56b4458a9
-8d/w/5e97d10eac742d85865ba744/e/c55f60db607fb82f3faf3af
-a?renderMode=0&uiState=6885d45944cc0165960b1b70
+https://cad.onshape.com/documents/fc0a5e085ca7f56b4458a98d/w/5e97d10eac742d85865ba744/e/c55f60db607fb82f3faf3afa?renderMode=0&uiState=6885d45944cc0165960b1b70 
 ### Finished code:
 https://github.com/Ja-r-ed/SoccerSTS
