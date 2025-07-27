@@ -1,7 +1,7 @@
-### Project Report: Omnidirectional Soccer Wheelchair
-# Aiden Blanchfield, year 10
-# Jared Jin, year 10
-# Glen Waverley Secondary College
+# Project Report: Omnidirectional Soccer Wheelchair
+### Aiden Blanchfield, year 10
+### Jared Jin, year 10
+### Glen Waverley Secondary College
 ## 1. Introduction
 There has been a very large push in recent years to get people with all levels of ability into
 sports, particularly those with disabilities. This is why wheelchair basketball exists: for people
@@ -110,7 +110,7 @@ day.
 Aldrich Liem, for giving us constant advice and lending us equipment to help make this
 happen.
 ## 10. Appendix
-#Logbook:
+### Logbook:
 30/3/25 - Started CAD model
 - Created first models of premade parts
 - Started work on omniwheels CAD
@@ -165,9 +165,9 @@ happen.
 - Moved from ESP32 to an Arduino Mega because we accidently killed both of our ESP32s…
 - Because of no ESP32 (and thus no wifi/bluetooth functionality), we used a IR (infrared) remote
 - Used much simpler code without the complex math because it was more reliable 
-# Finished CAD:
+### Finished CAD:
 https://cad.onshape.com/documents/fc0a5e085ca7f56b4458a9
 8d/w/5e97d10eac742d85865ba744/e/c55f60db607fb82f3faf3af
 a?renderMode=0&uiState=6885d45944cc0165960b1b70
-# Finished code:
+### Finished code:
 https://github.com/Ja-r-ed/SoccerSTS
