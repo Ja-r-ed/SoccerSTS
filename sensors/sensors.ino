@@ -1,8 +1,8 @@
 #include <WiFi.h>
 
 // Replace with your network credentials
-const char* ssid = "Telstra0C72ML";
-const char* password = "1432417514";
+const char* ssid = "OPPO Find X5";
+const char* password = "8kswn2cn";
 
 WiFiServer server(10000);  // server port to listen on
 
@@ -18,7 +18,7 @@ void setup() {
   pinMode(LeftY, OUTPUT);
   pinMode(RightX, OUTPUT);
 
-  Serial.begin(115200);
+  Serial.begin(9600);
 
   Serial.printf("Connecting to %s\n", ssid);
   Serial.printf("\nattempting to connect to WiFi network SSID '%s' password '%s' \n", ssid, password);
@@ -47,10 +47,9 @@ void loop() {
     int length;
     float values[4];
     if ((length = client.available()) >= sizeof(values)) {
-      Serial.printf("Received length %d - ", length);
       size_t bytesRead = client.readBytes((char*)values, sizeof(values));
       if (bytesRead == sizeof(values)) {
-        Serial.printf("values: %f, %f, %f, %f\n", values[0], values[1], values[2], values[3]);
+        Serial.printf("%f, %f, %f, %f\n", values[0], values[1], values[2], values[3]);
         analogWrite(LeftX, 100+(values[0]*100));
         analogWrite(LeftY, 100-(values[1]*100));
         analogWrite(RightX, 100+(values[2]*100));
