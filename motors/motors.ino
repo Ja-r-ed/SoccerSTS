@@ -2,18 +2,23 @@
 #include <Arduino.h>
 
 
-int M1a = 3;
-int M1b = 4;
-int M2a = 5;
-int M2b = 6;
-int M3a = 12;
-int M3b = 13;
-int M4a = 7;
-int M4b = 11;
+int M1a = 13;
+int M1b = 12;
+int M2a = 4;
+int M2b = 3;
+int M3a = 7;
+int M3b = 11;
+int M4a = 6;
+int M4b = 5;
 
 int d1 = 22;
 int d2 = 23;
 int dena = 2;
+
+int LeftX = A0;
+int LeftY = A1;
+int RightX = A2;
+const unsigned long sampleDuration = 200; // Sampling time in milliseconds
 
 /*
 Front Left  (M1)
@@ -54,21 +59,45 @@ void setup() {
   pinMode(d1, OUTPUT);
   pinMode(d2, OUTPUT);
   pinMode(dena, OUTPUT);
+  pinMode(LeftX, INPUT);
+  pinMode(LeftY, INPUT);
+  pinMode(RightX, INPUT);
   delay(100);
 
-  // Open Serial1 for communication on RX1/TX1 (pins 19/18 on Mega)
-  Serial1.begin(9600);
+  Serial.begin(9600);
 }
 
 void loop() {
-  // Read 4 floats from Serial1 if available
-  if (Serial1.available() >= sizeof(float) * 4) {
-    Serial1.readBytes((char*)serialFloats, sizeof(float) * 4);
-    drive(serialFloats[0], serialFloats[1], serialFloats[2]);
-    if (serialFloats[3] > 0.5) {
-      dribble();
-    }
+  unsigned long startTime = millis();
+  unsigned long sum0 = 0;
+  unsigned long sum1 = 1;
+  unsigned long sum2 = 2;
+  int count = 0;
+
+  while (millis() - startTime < sampleDuration) {
+    int value0 = analogRead(LeftX);
+    sum0 += value0;
+    int value1 = analogRead(LeftY);
+    sum1 += value1;
+    int value2 = analogRead(RightX);
+    sum2 += value2;
+    count++;
   }
+
+  int average0 = (count > 0) ? (sum0 / count) : 0;
+  int average1 = (count > 0) ? (sum1 / count) : 0;
+  int average2 = (count > 0) ? (sum2 / count) : 0;
+
+  Serial.print("Average 0: ");
+  Serial.print(convert(average0));
+  Serial.print("Average 1: ");
+  Serial.print(convert(average1));
+  Serial.print("Average 2: ");
+  Serial.println(convert(average2));
+}
+
+float convert(int value){
+  return (value-270.0)/270.0;
 }
 
 void MotorTest() {
