@@ -1,14 +1,8 @@
 #include <WiFi.h>
 
 // Replace with your network credentials
-<<<<<<< HEAD
-const char* ssid = "TelstraOC72ML";
-const char* password = "1432417514";
-
-=======
 const char* ssid = "Telstra0C72ML";
 const char* password = "1432417514";
->>>>>>> 664e393500df0ef9f07320d5347b990f27f8e1b7
 
 WiFiServer server(10000);  // server port to listen on
 
@@ -48,14 +42,6 @@ void loop() {
     float values[4];
     if ((length = client.available()) >= sizeof(values)) {
       Serial.printf("Received length %d - ", length);
-<<<<<<< HEAD
-      // if data is correct length read and display it
-      if (length == sizeof(value)) {
-        client.readBytes((char*)&value, sizeof(value));
-        Serial.printf("value %f \n", value);
-      } else
-        while (client.available()) Serial.print(client.read());  // discard corrupt packet
-=======
       size_t bytesRead = client.readBytes((char*)values, sizeof(values));
       if (bytesRead == sizeof(values)) {
         Serial.printf("values: %f, %f, %f, %f\n", values[0], values[1], values[2], values[3]);
@@ -67,7 +53,6 @@ void loop() {
       while (client.available()) client.read();
         } else if (length > 0) {
       while (client.available()) client.read();
->>>>>>> 664e393500df0ef9f07320d5347b990f27f8e1b7
     }
   }
 }
