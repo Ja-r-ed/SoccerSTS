@@ -3,8 +3,8 @@
 #include <WiFi.h>
 
 // Replace with your network credentials
-const char* ssid = "xxxxx";
-const char* password = "xxxxxx";
+const char* ssid = "TelstraOC72ML";
+const char* password = "1432417514";
 
 
 WiFiServer server(10000);  // server port to listen on
@@ -51,7 +51,7 @@ void loop() {
         client.readBytes((char*)&value, sizeof(value));
         Serial.printf("value %f \n", value);
       } else
-        while (client.available()) Serial.print((char)client.read());  // discard corrupt packet
+        while (client.available()) Serial.print(client.read());  // discard corrupt packet
     }
   }
 }

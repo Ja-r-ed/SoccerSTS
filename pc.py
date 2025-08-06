@@ -6,7 +6,7 @@ import pygame
 pygame.init()
 pygame.joystick.init()
 
-TCP_IP = '192.168.1.66'
+TCP_IP = '192.168.0.178'
 TCP_PORT = 10000
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
