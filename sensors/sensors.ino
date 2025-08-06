@@ -9,10 +9,16 @@ WiFiServer server(10000);  // server port to listen on
 // Define Serial1 pins (adjust as needed)
 #define SERIAL1_RX 16
 #define SERIAL1_TX 17
+#define LeftX 17
+#define LeftY 16
+#define RightX 4
 
 void setup() {
+  pinMode(LeftX, OUTPUT);
+  pinMode(LeftY, OUTPUT);
+  pinMode(RightX, OUTPUT);
+
   Serial.begin(115200);
-  Serial1.begin(9600, SERIAL_8N1, SERIAL1_RX, SERIAL1_TX); // Second serial port
 
   Serial.printf("Connecting to %s\n", ssid);
   Serial.printf("\nattempting to connect to WiFi network SSID '%s' password '%s' \n", ssid, password);
@@ -45,8 +51,9 @@ void loop() {
       size_t bytesRead = client.readBytes((char*)values, sizeof(values));
       if (bytesRead == sizeof(values)) {
         Serial.printf("values: %f, %f, %f, %f\n", values[0], values[1], values[2], values[3]);
-        // Send the 4 floats as raw bytes over Serial2
-        Serial1.printf("%f, %f, %f, %f\n", values[0], values[1], values[2], values[3]);
+        analogWrite(LeftX, 100+(values[0]*100));
+        analogWrite(LeftY, 100-(values[1]*100));
+        analogWrite(RightX, 100+(values[2]*100));
       } else {
         Serial.println("Error: Did not read 16 bytes for 4 floats.");
       }
