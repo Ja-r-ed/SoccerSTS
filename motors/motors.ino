@@ -18,7 +18,7 @@ int dena = 2;
 int LeftX = A0;
 int LeftY = A1;
 int RightX = A2;
-const unsigned long sampleDuration = 200; // Sampling time in milliseconds
+const unsigned long sampleDuration = 500; // Sampling time in milliseconds
 
 /*
 Front Left  (M1)
@@ -45,7 +45,7 @@ int M3Target = 0;
 int M4Target = 0;
 
 // Buffer for incoming serial data
-float serialFloats[4] = {0, 0, 0, 0};
+float list[4];
 
 void setup() {
   pinMode(M1a, OUTPUT);
@@ -64,36 +64,73 @@ void setup() {
   pinMode(RightX, INPUT);
   delay(100);
 
-  Serial.begin(9600);
+  Serial.begin(115200);    // Serial monitor (USB)
+  Serial1.begin(9600);     // Serial1 for communication with ESP32
 }
 
-void loop() {
-  unsigned long startTime = millis();
-  unsigned long sum0 = 0;
-  unsigned long sum1 = 1;
-  unsigned long sum2 = 2;
-  int count = 0;
+void loop()
+{
+  if (Serial1.available())
+  {
+    String message = Serial1.readStringUntil('\n');  // Read the line from ESP32
+    
+    // Parse the CSV string into the list[4]
+    int index = 0;
+    int lastComma = -1;
 
-  while (millis() - startTime < sampleDuration) {
-    int value0 = analogRead(LeftX);
-    sum0 += value0;
-    int value1 = analogRead(LeftY);
-    sum1 += value1;
-    int value2 = analogRead(RightX);
-    sum2 += value2;
-    count++;
+    for (int i = 0; i < message.length(); i++)
+    {
+      if (message.charAt(i) == ',' || i == message.length() - 1)
+      {
+        // Get substring from lastComma+1 to i
+        String valueStr;
+        if (message.charAt(i) == ',') {
+          valueStr = message.substring(lastComma + 1, i);
+        } else {
+          valueStr = message.substring(lastComma + 1); // end of line
+        }
+
+        valueStr.trim();  // Remove whitespace
+        if (index < 4)
+        {
+          list[index] = valueStr.toFloat();  // Convert and store
+          index++;
+        }
+
+        lastComma = i;
+      }
+    }
+
+    // // Print parsed float array
+    // Serial.print("Parsed floats: ");
+    // for (int i = 0; i < 4; i++)
+    // {
+    //   Serial.print(list[i], 6);  // Optional: print with 6 decimal places
+    //   Serial.print(" ");
+    // }
+    // Serial.println();
   }
+  Serial.print(getAngleDegrees(list[0], list[1]));
+  Serial.print(" ");
+  Serial.print(getDistance(list[0], list[1]));
+  Serial.print(" ");
+  Serial.println(list[2]);
+  drive(getAngleDegrees(list[0], list[1]), getDistance(list[0], list[1]), list[2]/4);
+  if(-list[3]>0.5) {dribble();}
+  if(-list[3]<-0.5) {stopdribble();}
+}
 
-  int average0 = (count > 0) ? (sum0 / count) : 0;
-  int average1 = (count > 0) ? (sum1 / count) : 0;
-  int average2 = (count > 0) ? (sum2 / count) : 0;
+float getAngleDegrees(float x, float y) {
+  float angleRad = atan2(x, -y);             // Angle in radians, -PI to PI
+  float angleDeg = angleRad * 180.0 / PI;   // Convert to degrees
+  if (angleDeg < 0) {
+    angleDeg += 360.0;                      // Normalize to 0–360
+  }
+  return angleDeg;
+}
 
-  Serial.print("Average 0: ");
-  Serial.print(convert(average0));
-  Serial.print("Average 1: ");
-  Serial.print(convert(average1));
-  Serial.print("Average 2: ");
-  Serial.println(convert(average2));
+float getDistance(float x, float y) {
+  return sqrt(x * x + y * y);               // Pythagorean theorem
 }
 
 float convert(int value){
@@ -115,12 +152,26 @@ void MotorTest() {
 }
 
 void dribble() {
+  digitalWrite(d1, HIGH);
+  digitalWrite(d2, LOW);
+  analogWrite(dena, 120);
+}
+
+void stopdribble() {
   digitalWrite(d1, LOW);
-  digitalWrite(d2, HIGH);
-  analogWrite(dena, 70);
+  digitalWrite(d2, LOW);
+  analogWrite(dena, 0); 
 }
 
 void drive(float direction_deg, float speed, float rotation) {
+    // Apply deadzone thresholds
+    if (speed <= 0.07) {
+        speed = 0;
+    }
+    if (abs(rotation) <= 0.05) {
+        rotation = 0;
+    }
+
     // Convert direction to radians
     float direction_rad = direction_deg * 3.14159265 / 180.0;
     float vx = speed * cos(direction_rad);
@@ -146,10 +197,11 @@ void drive(float direction_deg, float speed, float rotation) {
         }
     }
 
-    SetSpeed(1, wheel_speeds[0]*255);
-    SetSpeed(2, wheel_speeds[1]*255);
-    SetSpeed(3, wheel_speeds[3]*255);
-    SetSpeed(4, wheel_speeds[2]*255);
+    // Apply motor speeds (mapped to range -255 to 255)
+    SetSpeed(1, wheel_speeds[0] * 255);
+    SetSpeed(2, wheel_speeds[1] * 255);
+    SetSpeed(3, wheel_speeds[3] * 255);
+    SetSpeed(4, wheel_speeds[2] * 255);
 }
 
 void SetSpeed(int Motor, int PWM) {
