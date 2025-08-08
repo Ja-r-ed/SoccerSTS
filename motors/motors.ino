@@ -45,7 +45,7 @@ int M3Target = 0;
 int M4Target = 0;
 
 // Buffer for incoming serial data
-float list[4];
+float list[9];
 
 void setup() {
   pinMode(M1a, OUTPUT);
@@ -70,29 +70,24 @@ void setup() {
 
 void loop()
 {
-  if (Serial1.available())
-  {
-    String message = Serial1.readStringUntil('\n');  // Read the line from ESP32
-    
-    // Parse the CSV string into the list[4]
+  if (Serial1.available()) {
+    String message = Serial1.readStringUntil('\n');  // Read the full line
+
     int index = 0;
     int lastComma = -1;
 
-    for (int i = 0; i < message.length(); i++)
-    {
-      if (message.charAt(i) == ',' || i == message.length() - 1)
-      {
-        // Get substring from lastComma+1 to i
+    for (int i = 0; i < message.length(); i++) {
+      if (message.charAt(i) == ',' || i == message.length() - 1) {
         String valueStr;
         if (message.charAt(i) == ',') {
           valueStr = message.substring(lastComma + 1, i);
         } else {
-          valueStr = message.substring(lastComma + 1); // end of line
+          valueStr = message.substring(lastComma + 1);
         }
 
         valueStr.trim();  // Remove whitespace
-        if (index < 4)
-        {
+
+        if (index < 9) {
           list[index] = valueStr.toFloat();  // Convert and store
           index++;
         }
@@ -101,23 +96,30 @@ void loop()
       }
     }
 
-    // // Print parsed float array
-    // Serial.print("Parsed floats: ");
-    // for (int i = 0; i < 4; i++)
-    // {
-    //   Serial.print(list[i], 6);  // Optional: print with 6 decimal places
-    //   Serial.print(" ");
-    // }
-    // Serial.println();
+    // Optional: Print parsed values
+    /*
+    Serial.print("Parsed values: ");
+    for (int i = 0; i < 9; i++) {
+      Serial.print(list[i], 3);
+      Serial.print(" ");
+    }
+    Serial.println();
+    */
   }
+
   Serial.print(getAngleDegrees(list[0], list[1]));
   Serial.print(" ");
   Serial.print(getDistance(list[0], list[1]));
   Serial.print(" ");
   Serial.println(list[2]);
-  drive(getAngleDegrees(list[0], list[1]), getDistance(list[0], list[1]), list[2]/4);
-  if(-list[3]>0.5) {dribble();}
-  if(-list[3]<-0.5) {stopdribble();}
+  drive(getAngleDegrees(list[0], list[1]), getDistance(list[0], list[1]), list[2]);
+  if(list[5]) {stopdribble();}
+  if(list[6]) {kickWithDribbler();}
+  if(list[7]) {dribble();}
+  if(list[8]) {resetGyro();}
+  if(-list[3] > 0.05 && -list[3] < -0.05) {
+    dribbleWithStick(-list[3]);
+  }
 }
 
 float getAngleDegrees(float x, float y) {
@@ -154,7 +156,7 @@ void MotorTest() {
 void dribble() {
   digitalWrite(d1, HIGH);
   digitalWrite(d2, LOW);
-  analogWrite(dena, 120);
+  analogWrite(dena, 80);
 }
 
 void stopdribble() {
@@ -163,14 +165,39 @@ void stopdribble() {
   analogWrite(dena, 0); 
 }
 
+void dribbleWithStick(float speed) {
+  if(speed >0) {
+    digitalWrite(d1, HIGH);
+    digitalWrite(d2, LOW);
+    analogWrite(dena, speed*255); 
+  }
+  if(speed <0) {
+    digitalWrite(d1, LOW);
+    digitalWrite(d2, HIGH);
+    analogWrite(dena, -speed*255);     
+  }
+}
+
+void kickWithDribbler() {
+  digitalWrite(d1, LOW);
+  digitalWrite(d2, HIGH);
+  analogWrite(dena, 120);
+}
+
+void resetGyro() {
+
+}
+
 void drive(float direction_deg, float speed, float rotation) {
     // Apply deadzone thresholds
-    if (speed <= 0.07) {
+    if (speed <= 0.02) {
         speed = 0;
     }
-    if (abs(rotation) <= 0.05) {
+    if (abs(rotation) <= 0.02) {
         rotation = 0;
     }
+
+    rotation = rotation * 0.125; // Scale rotation for better control
 
     // Convert direction to radians
     float direction_rad = direction_deg * 3.14159265 / 180.0;
